@@ -47,14 +47,22 @@ export default function TagInput() {
         }}
       >
         {selectedTags.map((item, index) => {
+          if (item.type === "tag") {
+            return (
+              <Tag
+                key={index}
+                text={item.text}
+                onClick={() => {
+                  handleRemoveItem(index);
+                }}
+              />
+            );
+          }
+
           return (
-            <Tag
-              key={index}
-              text={item.text}
-              onClick={() => {
-                handleRemoveItem(index);
-              }}
-            />
+            <p key={index} className="app_tag_item__p">
+              {item.text}
+            </p>
           );
         })}
 
@@ -64,6 +72,11 @@ export default function TagInput() {
             type="text"
             name="tag"
             className="app_input_box__input"
+            onKeyDown={(e) => {
+              if (e.key === "Backspace" && inputRef.current?.value === "") {
+                handleRemoveItem(selectedTags.length - 1);
+              }
+            }}
           />
         </form>
       </div>
